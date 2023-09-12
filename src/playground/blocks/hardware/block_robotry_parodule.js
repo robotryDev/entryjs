@@ -77,8 +77,32 @@ Entry.Robotry_Parodule.setLanguage = function () {
                 Parodule_Update: '파로듈 업데이트 %1',
             },
             Helper: { // 블록 선택시 나타나는 한글 설명
-
-                //Parodule_Update: '파로듈 업데이트',
+                Parodule_Sensor_Data:
+                    '센서값을 반환합니다.',
+                Parodule_Sensor_Kind:
+                    '이 블록을 말하기 블록에 사용하면 모듈의 종류를 알 수 있습니다.',
+                Parodule_Set:
+                    '메인모듈에 연결된 모듈의 종류를 설정합니다.',
+                Parodule_PIXEL:
+                    '모든 픽셀을 선택된 색상으로 출력합니다.',
+                Parodule_Motor:
+                    '모터 모듈을 이용해 전진, 후진, 좌회전, 우회전을 할 수 있습니다.<br>모터모듈을 템플릿에 연결할때 세모/ 네모, 원/ 십자 로 묶어서 같은 방향에 장착해야합니다.',
+                Parodule_Buzzer:
+                    '모든 부저에서 선택된 음을 재생합니다.',
+                Parodule_Custom_Pixel:
+                    '선택된 포트에 연결된 픽셀에 지정된 색상을 출력합니다.',
+                Parodule_Custom_Motor:
+                    '선택된 포트에 연결된 모터를 지정된 파워와 방향으로 회전합니다.',
+                Parodule_Custom_Buzzer:
+                    '선택된 포트에 연결된 부저로 지정된 음을 재생합니다.',
+                Parodule_Module_Off:
+                    '선택된 포트에 연결된 모듈의 동작을 중지시킵니다.',
+                Parodule_Module_Standby:
+                    '선택된 포트에 연결된 모듈이 다른 모듈의 동작으로 부터 방해받지 않도록합니다.',
+                Parodule_Func_Pixel:
+                    'LED(픽셀) 모듈에 내장된 특수한 동작을 사용할 수 있습니다.',
+                Parodule_Func_Buzzer:
+                    '부저 모듈에 내장된 특수한 동작을 사용할 수 있습니다.',
             },
             Blocks: {
                 parodule_triangle: '세모',
@@ -160,8 +184,32 @@ Entry.Robotry_Parodule.setLanguage = function () {
                 Parodule_Update: '파로듈 업데이트 %1',
             },
             Helper: {
-
-                //Parodule_Update: '파로듈 업데이트',
+                Parodule_Sensor_Data:
+                    '센서값을 반환합니다.',
+                Parodule_Sensor_Kind:
+                    '이 블록을 말하기 블록에 사용하면 모듈의 종류를 알 수 있습니다.',
+                Parodule_Set:
+                    '메인모듈에 연결된 모듈의 종류를 설정합니다.',
+                Parodule_PIXEL:
+                    '모든 픽셀을 선택된 색상으로 출력합니다.',
+                Parodule_Motor:
+                    '모터 모듈을 이용해 전진, 후진, 좌회전, 우회전을 할 수 있습니다.<br>모터모듈을 템플릿에 연결할때 세모/네모, 원/십자 로 묶어서 같은 방향에 장착해야합니다.',
+                Parodule_Buzzer:
+                    '모든 부저에서 선택된 음을 재생합니다.',
+                Parodule_Custom_Pixel:
+                    '선택된 포트에 연결된 픽셀에 지정된 색상을 출력합니다.',
+                Parodule_Custom_Motor:
+                    '선택된 포트에 연결된 모터를 지정된 파워와 방향으로 회전합니다.',
+                Parodule_Custom_Buzzer:
+                    '선택된 포트에 연결된 부저로 지정된 음을 재생합니다.',
+                Parodule_Module_Off:
+                    '선택된 포트에 연결된 모듈의 동작을 중지시킵니다.',
+                Parodule_Module_Standby:
+                    '선택된 포트에 연결된 모듈이 다른 모듈의 동작으로 부터 방해받지 않도록합니다.',
+                Parodule_Func_Pixel:
+                    'LED(픽셀) 모듈에 내장된 특수한 동작을 사용할 수 있습니다.',
+                Parodule_Func_Buzzer:
+                    '부저 모듈에 내장된 특수한 동작을 사용할 수 있습니다.',
             },
             Blocks: {
                 parodule_triangle: 'triangle',
@@ -989,7 +1037,7 @@ Entry.Robotry_Parodule.getBlocks = function () {
                 const port = script.getNumberValue('PORT') % 4;
                 const module_data = Entry.hw.portData.MODULE;
                 let correction_port = port === 1 ? 3 : port === 2 ? 1 : port === 3 ? 2 : 0;
-                let value = "";
+                let value = '';
 
                 if (module_data[correction_port] === PIXEL) {
                     value = [Lang.Blocks.parodule_pixel];
@@ -2052,7 +2100,7 @@ Entry.Robotry_Parodule.getBlocks = function () {
             class: 'CMD',
             isNotFor: ['Robotry_Parodule'],
             func(sprite, script) {
-                const update = "update\r\n";
+                const update = 'update\r\n';
                 if (!Entry.hw.sendQueue.CMD) {
                     Entry.hw.sendQueue.CMD = {};
                 }
