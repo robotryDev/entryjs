@@ -1830,69 +1830,6 @@ Entry.Robotry_Parodule.getBlocks = function () {
         },
         /* Parodule Custom Module Off End */
 
-        /* Paroduel Module Standby Start */
-        Parodule_Module_Standby: {
-            color: EntryStatic.colorSet.block.default.HARDWARE,
-            outerLine: EntryStatic.colorSet.block.darken.HARDWARE,
-            skeleton: 'basic',
-            statements: [],
-            params: [
-                {
-                    type: 'Block',
-                    accept: 'string',
-                    defaultType: 'number',
-                },
-                {
-                    type: 'Indicator',
-                    img: 'block_icon/hardware_icon.svg',
-                    size: 12,
-                }
-            ],
-            events: {},
-            def: {
-                params: [
-                    {
-                        type: 'Parodule_Custom_Port_List',
-                        params: ['0'],
-                    }
-                ],
-                type: 'Parodule_Module_Standby',
-            },
-            paramsKeyMap: {
-                PORT: 0,
-            },
-            class: 'SET',
-            isNotFor: ['Robotry_Parodule'],
-            func(sprite, script) {
-                const port = script.getNumberValue('PORT') % 4;
-                const value = 238; // 대기 동작유지
-                let correction_port = port === 1 ? 3 : port === 2 ? 1 : port === 3 ? 2 : 0;
-
-                if (!Entry.hw.sendQueue.SET) {
-                    Entry.hw.sendQueue.SET = {};
-                }
-                Entry.hw.sendQueue.SET[correction_port] = {
-                    type: Entry.Robotry_Parodule.controlTypes.DIGITAL,
-                    data: value,
-                    time: new Date().getTime(),
-                }
-                return script.callReturn();
-            },
-            syntax: {
-                js: [],
-                py: [{
-                    syntax: 'Parodule.set_Standby(%1)',
-                    textParams: [
-                        {
-                            type: 'Block',
-                            accept: 'string',
-                        },
-                    ],
-                }],
-            }
-        },
-        /* Parodule Module Standby End */
-
         Parodule_Func_title: {
             skeleton: 'basic_text',
             skeletonOptions: {
