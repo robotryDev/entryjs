@@ -1916,6 +1916,13 @@ Entry.Robotry_Parodule.getBlocks = function () {
                     data: correction_color,
                     time: new Date().getTime(),
                 }
+                setTimeout(() =>
+                    Entry.hw.sendQueue.SET[correction_port] = {
+                        type: Entry.Robotry_Parodule.controlTypes.DIGITAL,
+                        data: 255,
+                        time: new Date().getTime(),
+                    }, 5
+                );
                 return script.callReturn();
             },
             syntax: {
@@ -1994,6 +2001,13 @@ Entry.Robotry_Parodule.getBlocks = function () {
                     data: correction_tone,
                     time: new Date().getTime(),
                 }
+                setTimeout(() =>
+                    Entry.hw.sendQueue.SET[correction_port] = {
+                        type: Entry.Robotry_Parodule.controlTypes.DIGITAL,
+                        data: 255,
+                        time: new Date().getTime(),
+                    }, 5
+                );
                 return script.callReturn();
             },
             syntax: {
