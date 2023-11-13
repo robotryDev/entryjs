@@ -8,6 +8,7 @@ import AIUtilize from '../class/AIUtilize';
 import AILearning from '../class/AILearning';
 import Extension from '../extensions/extension';
 import CloudVariable from '../extensions/CloudVariable';
+import DataSource from '../util/dataSource';
 
 import './utils';
 
@@ -55,7 +56,7 @@ Entry.init = function(container, options) {
     Entry.initFonts(options.fonts);
     setDefaultTheme(options);
 
-    Entry.paintMode = options.paintMode || 'literallycanvas';
+    Entry.paintMode = options.paintMode || 'entry-paint';
     container && this.createDom(container, this.type);
     this.loadInterfaceState();
     this.overridePrototype();
@@ -254,7 +255,8 @@ Entry.disposeContainer = function() {
 Entry.initSoundQueue_ = function() {
     Entry.soundQueue = new createjs.LoadQueue();
     Entry.soundQueue.installPlugin(createjs.Sound);
-    Entry.soundInstances = [];
+    Entry.soundInstances = new DataSource();
+    Entry.bgmInstances = new DataSource();
     Entry.soundQueue.urls = new Set();
     Entry.soundQueue.total = 0;
     Entry.soundQueue.loadCallback = (src) => {

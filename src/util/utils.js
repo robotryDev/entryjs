@@ -36,7 +36,9 @@ Entry.loadProject = function(project) {
         Entry.stateManager.startIgnore();
     }
     Entry.projectId = project._id;
-    Entry.variableContainer.setVariables(Entry.Utils.combineCloudVariable(project));
+    Entry.variableContainer?.setVariables(Entry.Utils.combineCloudVariable(project), {
+        aiUtilizeBlocks: project.aiUtilizeBlocks,
+    });
     Entry.variableContainer.setMessages(project.messages);
     Entry.variableContainer.setFunctions(project.functions);
     DataTable?.setTables(project.tables);
@@ -48,7 +50,7 @@ Entry.loadProject = function(project) {
     GEHelper.Ticker.setFPS(Entry.FPS);
     Entry.aiUtilizeBlocks = project?.aiUtilizeBlocks || [];
     if (Entry.aiUtilizeBlocks.length > 0) {
-        for (const type in Entry.AI_UTILIZE_BLOCK_LIST) {
+        for (const type in Entry.ALL_AI_UTILIZE_BLOCK_LIST) {
             if (Entry.aiUtilizeBlocks.indexOf(type) > -1) {
                 Entry.AI_UTILIZE_BLOCK[type].init();
                 if (Entry.type === 'workspace' || Entry.type === 'playground') {
@@ -1585,6 +1587,25 @@ Entry.setCloneBrush = function(sprite, parentBrush) {
     sprite.shapes.push(shape);
 };
 
+Entry.setBasicPaint = function(sprite) {
+    const isWebGL = GEHelper.isWebGL;
+    const paint = GEHelper.brushHelper.newPaint();
+    const shape = GEHelper.brushHelper.newShape(paint);
+    paint.entity = sprite;
+    paint.opacity = 0;
+    paint.rgb = Entry.hex2rgb('#ff0000');
+    if (isWebGL) {
+        paint.beginFillFast(0xff0000, 1);
+    } else {
+        paint.beginFill('rgba(255,0,0,1)');
+    }
+    shape.entity = sprite;
+    const selectedObjectContainer = Entry.stage.selectedObjectContainer;
+    selectedObjectContainer.addChildAt(shape, selectedObjectContainer.getChildIndex(sprite.object));
+    sprite.paint = paint;
+    sprite.paintShapes.push(shape);
+};
+
 Entry.isFloat = function(num) {
     return /\d+\.{1}\d+$/.test(num);
 };
@@ -2685,6 +2706,7 @@ Entry.Utils.setVolume = function(volume) {
     this._volume = _clamp(volume, 0, 1);
 
     Entry.soundInstances
+        .getAllValues()
         .filter(({ soundType }) => !soundType)
         .forEach((instance) => {
             instance.volume = this._volume;
@@ -2698,36 +2720,63 @@ Entry.Utils.getVolume = function() {
     return 1;
 };
 
-Entry.Utils.forceStopSounds = function() {
-    _.each(Entry.soundInstances, (instance) => {
+Entry.Utils.playBGM = function(id, option = {}) {
+    const instance = createjs.Sound.play(id, Object.assign({ volume: 1 }, option));
+    return instance;
+};
+
+Entry.Utils.addBGMInstances = function(instance, sprite = 'global') {
+    Entry.bgmInstances.add(sprite, instance);
+    instance.on('complete', () => {
+        Entry.bgmInstances.deleteItemByKeyAndValue(sprite, instance);
+    });
+};
+
+Entry.Utils.forceStopBGM = function() {
+    _.each([...Entry.bgmInstances.getAllValues()], (instance) => {
         instance?.dispatchEvent?.('complete');
         instance?.stop?.();
     });
-    Entry.soundInstances = [];
+    Entry.bgmInstances.clear();
+};
+
+Entry.Utils.forceStopSounds = function() {
+    _.each([...Entry.soundInstances.getAllValues()], (instance) => {
+        instance?.dispatchEvent?.('complete');
+        instance?.stop?.();
+    });
+    Entry.soundInstances.clear();
 };
 
 Entry.Utils.playSound = function(id, option = {}) {
-    return createjs.Sound.play(id, Object.assign({ volume: this._volume }, option));
+    const instance = createjs.Sound.play(id, Object.assign({ volume: this._volume }, option));
+    if (instance.sourceNode?.playbackRate) {
+        instance.sourceNode.playbackRate.value = Entry.playbackRateValue;
+    }
+    return instance;
 };
 
-Entry.Utils.addSoundInstances = function(instance) {
-    Entry.soundInstances.push(instance);
+Entry.Utils.addSoundInstances = function(instance, sprite = 'global') {
+    Entry.soundInstances.add(sprite, instance);
     instance.on('complete', () => {
-        const index = Entry.soundInstances.indexOf(instance);
-        if (index > -1) {
-            Entry.soundInstances.splice(index, 1);
-        }
+        Entry.soundInstances.deleteItemByKeyAndValue(sprite, instance);
     });
 };
 
 Entry.Utils.pauseSoundInstances = function() {
-    Entry.soundInstances.map((instance) => {
+    Entry.soundInstances.getAllValues().forEach((instance) => {
+        instance.paused = true;
+    });
+    Entry.bgmInstances.getAllValues().forEach((instance) => {
         instance.paused = true;
     });
 };
 
 Entry.Utils.recoverSoundInstances = function() {
-    Entry.soundInstances.map((instance) => {
+    Entry.soundInstances.getAllValues().forEach((instance) => {
+        instance.paused = false;
+    });
+    Entry.bgmInstances.getAllValues().forEach((instance) => {
         instance.paused = false;
     });
 };
@@ -3006,6 +3055,9 @@ Entry.Utils.asyncAnimationFrame = (func) => {
     let captureTimeout = false;
 
     const asyncFunc = () => {
+        if (!Entry.engine.isState('run')) {
+            return;
+        }
         if (func instanceof Promise) {
             func().then(() => {
                 captureTimeout = requestAnimationFrame(asyncFunc);
@@ -3017,7 +3069,9 @@ Entry.Utils.asyncAnimationFrame = (func) => {
     };
 
     captureTimeout = requestAnimationFrame(asyncFunc);
-    return captureTimeout;
+    return () => {
+        cancelAnimationFrame(captureTimeout);
+    };
 };
 
 Entry.Utils.stringFormat = (text, ...args) => {

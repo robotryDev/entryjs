@@ -3,9 +3,9 @@
 /* eslint-disable */
 var EntryStatic = {
     isPracticalCourse: true,
-    fontFamily: 'NanumGothic',
+    fontFamily: "NanumGothic, 'Nanum Gothic'",
     exportBlockFontFamily:
-        "NanumGothic, 'NanumGothic', '나눔고딕','NanumGothicWeb', '맑은 고딕', 'Malgun Gothic', Dotum",
+        "NanumGothic, 'Nanum Gothic', 'NanumGothic', '나눔고딕','NanumGothicWeb', '맑은 고딕', 'Malgun Gothic', Dotum",
     fontOffsetY: -2.5,
     heightLetter: 'M',
     objectTypes: ['sprite', 'textBox'],
@@ -618,6 +618,12 @@ EntryStatic.fonts = [
         visible: true,
     },
     {
+        name: Lang.Fonts.nanumbarunpen,
+        family: 'Nanum Barun Pen',
+        url: '/css/nanumbarunpen.css',
+        visible: true,
+    },
+    {
         name: Lang.Fonts.pen_script,
         family: 'Nanum Pen Script',
         url: '/css/nanumpenscript.css',
@@ -630,9 +636,21 @@ EntryStatic.fonts = [
         visible: true,
     },
     {
-        name: Lang.Fonts.gothic_coding,
-        family: 'Nanum Gothic Coding',
-        url: '/css/nanumgothiccoding.css',
+        name: Lang.Fonts.maruburi,
+        family: 'MaruBuri',
+        url: '/css/maruburi.css',
+        visible: true,
+    },
+    {
+        name: Lang.Fonts.notosans,
+        family: 'NotoSans',
+        url: '/css/notosans.css',
+        visible: true,
+    },
+    {
+        name: Lang.Fonts.d2coding,
+        family: 'D2 Coding',
+        url: '/css/d2coding.css',
         visible: true,
     },
     {
@@ -662,42 +680,84 @@ EntryStatic.fonts = [
     {
         name: Lang.Fonts.sd_comic_stencil,
         family: 'SDComicStencil',
+        style: {
+            backgroundColor: '#f7fcff',
+            padding: '17px 22px 14px 16px',
+            margin: '0px',
+            borderTop: 'solid 1px #d6e9f4',
+        },
         url: '/css/SDComicStencil.css',
         visible: true,
     },
     {
         name: Lang.Fonts.sd_childfundkorea,
         family: 'SDChildfundkorea',
+        style: {
+            backgroundColor: '#f7fcff',
+            padding: '17px 22px 14px 16px',
+            margin: '0px',
+            borderTop: 'solid 1px #d6e9f4',
+        },
         url: '/css/SDChildfundkorea.css',
         visible: true,
     },
     {
         name: Lang.Fonts.sd_cinema_theater,
         family: 'SDCinemaTheater',
+        style: {
+            backgroundColor: '#f7fcff',
+            padding: '17px 22px 14px 16px',
+            margin: '0px',
+            borderTop: 'solid 1px #d6e9f4',
+        },
         url: '/css/SDCinemaTheater.css',
         visible: true,
     },
     {
         name: Lang.Fonts.sd_mapssi,
         family: 'SDMapssi',
+        style: {
+            backgroundColor: '#f7fcff',
+            padding: '17px 22px 14px 16px',
+            margin: '0px',
+            borderTop: 'solid 1px #d6e9f4',
+        },
         url: '/css/SDMapssi.css',
         visible: true,
     },
     {
         name: Lang.Fonts.sd_shabang,
         family: 'SDShabang',
+        style: {
+            backgroundColor: '#f7fcff',
+            padding: '17px 22px 14px 16px',
+            margin: '0px',
+            borderTop: 'solid 1px #d6e9f4',
+        },
         url: '/css/SDShabang.css',
         visible: true,
     },
     {
         name: Lang.Fonts.sd_woodcarving,
         family: 'SDWoodcarving',
+        style: {
+            backgroundColor: '#f7fcff',
+            padding: '17px 22px 14px 16px',
+            margin: '0px',
+            borderTop: 'solid 1px #d6e9f4',
+        },
         url: '/css/SDWoodcarving.css',
         visible: true,
     },
     {
         name: Lang.Fonts.sd_yongbi,
         family: 'SDYongbi',
+        style: {
+            backgroundColor: '#f7fcff',
+            padding: '17px 22px 14px 16px',
+            margin: '0px',
+            borderTop: 'solid 1px #d6e9f4',
+        },
         url: '/css/SDYongbi.css',
         visible: true,
     },
@@ -852,7 +912,7 @@ EntryStatic.getDefaultFontFamily = function() {
     const langType = type || fallbackType || 'en';
     switch (langType) {
         default:
-            return "NanumGothic, 나눔고딕, NanumGothicWeb, '맑은 고딕', 'Malgun Gothic', Dotum";
+            return "NanumGothic, 'Nanum Gothic', 나눔고딕, NanumGothicWeb, '맑은 고딕', 'Malgun Gothic', Dotum";
     }
 };
 

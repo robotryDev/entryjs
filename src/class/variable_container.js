@@ -1220,7 +1220,7 @@ Entry.VariableContainer = class VariableContainer {
     /**
      * @param {!Array.<variable model>} variables
      */
-    setVariables(variables = []) {
+    setVariables(variables = [], options) {
         variables.forEach((variable) => {
             variable = Entry.Variable.create(variable);
             switch (variable.getType()) {
@@ -1239,9 +1239,6 @@ Entry.VariableContainer = class VariableContainer {
                 case 'answer':
                     this.generateAnswer(variable);
                     break;
-                case 'stt':
-                    this.generateStt(variable);
-                    break;
             }
         });
 
@@ -1253,6 +1250,9 @@ Entry.VariableContainer = class VariableContainer {
         }
         if (_.isEmpty(Entry.container.sttValue)) {
             this.generateStt();
+            if (options?.aiUtilizeBlocks?.includes('audio')) {
+                Entry.container.sttValue.setVisible(true);
+            }
         }
 
         Entry.playground.reloadPlayground();
@@ -2050,11 +2050,11 @@ Entry.VariableContainer = class VariableContainer {
                 Lang.Workspace.message_rename_failed,
                 Lang.Workspace.message_dup
             );
-        } else if (name.length > 10) {
+        } else if (name.length > EntryStatic.messageMaxLength) {
             return failFunc(
                 message.name,
                 Lang.Workspace.message_rename_failed,
-                Lang.Workspace.message_too_long
+                Lang.Workspace.message_too_long_to_change
             );
         }
 
@@ -2676,6 +2676,12 @@ Entry.VariableContainer = class VariableContainer {
                 this.blur();
             } else {
                 const value = msgNameInput.value;
+                if (value.length > EntryStatic.messageMaxLength) {
+                    return Entry.toast.alert(
+                        Lang.Workspace.message_add_fail,
+                        Lang.Workspace.message_too_long
+                    );
+                }
                 that.messageAddPanel.isOpen = false;
                 msgAddSpace.addClass('off');
                 msgNameInput.value = '';
@@ -2712,6 +2718,12 @@ Entry.VariableContainer = class VariableContainer {
             .addClass('entryVariableAddSpaceButtonWorkspace')
             .bindOnClick(() => {
                 const value = msgNameInput.value;
+                if (value.length > EntryStatic.messageMaxLength) {
+                    return Entry.toast.alert(
+                        Lang.Workspace.message_add_fail,
+                        Lang.Workspace.message_too_long
+                    );
+                }
                 this.messageAddPanel.isOpen = false;
                 msgAddSpace.addClass('off');
                 msgNameInput.value = '';
@@ -2848,16 +2860,13 @@ Entry.VariableContainer = class VariableContainer {
             answer ||
             Entry.Variable.create({
                 id: Entry.generateHash(),
-                name: 'stt',
-                value: 0,
+                name: Lang.template.voice_title_text,
+                value: '-',
                 variableType: 'stt',
                 visible: false,
-                x: 150,
-                y: -100,
             });
         answer.generateView();
         Entry.container.sttValue = answer;
-        Entry.container.sttValue.setName('STT');
     }
 
     generateVariableSettingView(variable) {

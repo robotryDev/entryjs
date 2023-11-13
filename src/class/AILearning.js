@@ -52,7 +52,7 @@ export default class AILearning {
 
     removeAllBlocks() {
         const utilizeBlock = [];
-        Object.values(Entry.AI_UTILIZE_BLOCK_LIST)
+        Object.values(Entry.ALL_AI_UTILIZE_BLOCK_LIST)
             .map((x) => Object.keys(x.getBlocks()))
             .forEach((category) => {
                 category.forEach((block) => {
@@ -76,11 +76,12 @@ export default class AILearning {
         if (!this.isLoaded) {
             return;
         }
+        this.#modelId = undefined;
         const { blocks } = EntryStatic.getAllBlocks().find(
             ({ category }) => category === 'ai_utilize'
         );
         blocks
-            .filter((x) => Entry.block[x].class === 'ai_learning')
+            .filter((x) => Entry.block?.[x]?.class === 'ai_learning')
             .forEach((blockType) => {
                 Entry.Utils.removeBlockByType(blockType);
             });

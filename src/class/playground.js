@@ -694,6 +694,7 @@ Entry.Playground = class Playground {
 
     updatePictureView() {
         if (this.pictureSortableListWidget) {
+            this.pictureSortableListWidget.setData({ items: [] });
             this.pictureSortableListWidget.setData({
                 items: this._getSortablePictureList(),
             });
@@ -2011,6 +2012,7 @@ Entry.Playground = class Playground {
                 isPlaying = false;
                 thumbnailView.removeClass('entryPlaygroundSoundStop');
                 thumbnailView.addClass('entryPlaygroundSoundPlay');
+                soundInstance.dispatchEvent('complete');
                 soundInstance.stop();
                 return;
             } else {
@@ -2237,7 +2239,7 @@ Entry.Playground = class Playground {
             return;
         }
 
-        Object.values(Entry.AI_UTILIZE_BLOCK_LIST).forEach((block) => {
+        Object.values(Entry.ALL_AI_UTILIZE_BLOCK_LIST).forEach((block) => {
             blockMenu.banClass(block.name, true);
             blockMenu.banClass(`${block.name}_legacy`, true);
         });

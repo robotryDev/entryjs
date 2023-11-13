@@ -274,10 +274,15 @@ module.exports = {
                     },
                     {
                         type: 'Dropdown',
-                        options: [[Lang.Blocks.is_type_number, 'number']],
+                        options: [
+                            [Lang.Blocks.is_type_number, 'number'],
+                            [Lang.Blocks.is_type_en, 'en'],
+                            [Lang.Blocks.is_type_ko, 'ko'],
+                        ],
                         value: 'number',
                         fontSize: 10,
                         bgColor: EntryStatic.colorSet.block.darken.JUDGE,
+                        arrowColor: EntryStatic.colorSet.arrow.default.DEFAULT,
                     },
                     {
                         type: 'Text',
@@ -301,10 +306,13 @@ module.exports = {
                     const type = script.getField('TYPE', script);
 
                     if (type === 'number') {
-                        const numCheckRegex = /^-?\d+$/;
-                        if (numCheckRegex.test(value)) {
-                            return true;
-                        }
+                        return Entry.Utils.isNumber(value);
+                    } else if (type === 'en') {
+                        const pattern = /^[a-zA-Z]+$/;
+                        return pattern.test(value);
+                    } else if (type === 'ko') {
+                        const pattern = /^[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]+$/;
+                        return pattern.test(value);
                     }
                     return false;
                 },
