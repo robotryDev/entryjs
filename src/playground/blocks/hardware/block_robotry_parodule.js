@@ -68,7 +68,6 @@ Entry.Robotry_Parodule.setLanguage = function () {
                 Parodule_Custom_Motor: '%1 에 연결된 모터를 %2 의 파워로 %3 %4',
                 Parodule_Custom_Buzzer: '%1 에 연결된 부저를 %2 옥타브 %3 (으)로 재생 %4',
                 Parodule_Module_Off: '%1 에 연결된 모듈 동작 종료 %2',
-                Parodule_Module_Standby: '%1 에 연결된 모듈 동작 유지 %2',
 
                 Parodule_Func_title: '내장 동작\0',
                 Parodule_Func_Pixel: '%1 에 연결된 픽셀을 %2 으로 설정 %3',
@@ -97,8 +96,6 @@ Entry.Robotry_Parodule.setLanguage = function () {
                     '선택된 포트에 연결된 부저로 지정된 음을 재생합니다.',
                 Parodule_Module_Off:
                     '선택된 포트에 연결된 모듈의 동작을 중지시킵니다.',
-                Parodule_Module_Standby:
-                    '선택된 포트에 연결된 모듈이 다른 모듈의 동작으로 부터 방해받지 않도록합니다.',
                 Parodule_Func_Pixel:
                     'LED(픽셀) 모듈에 내장된 특수한 동작을 사용할 수 있습니다.',
                 Parodule_Func_Buzzer:
@@ -175,7 +172,6 @@ Entry.Robotry_Parodule.setLanguage = function () {
                 Parodule_Custom_Motor: 'Set the motor of  %1 to %2 power and move %3 %4',
                 Parodule_Custom_Buzzer: 'Play the buzzer of  %1 in %2 octave %3 %4',
                 Parodule_Module_Off: 'Set Off module of  %1 %2',
-                Parodule_Module_Standby: 'Set Stand-by module of  %1 %2',
 
                 Parodule_Func_title: '내장 동작\0',
                 Parodule_Func_Pixel: 'Set pixels of  %1 to %2 %3',
@@ -204,8 +200,6 @@ Entry.Robotry_Parodule.setLanguage = function () {
                     '선택된 포트에 연결된 부저로 지정된 음을 재생합니다.',
                 Parodule_Module_Off:
                     '선택된 포트에 연결된 모듈의 동작을 중지시킵니다.',
-                Parodule_Module_Standby:
-                    '선택된 포트에 연결된 모듈이 다른 모듈의 동작으로 부터 방해받지 않도록합니다.',
                 Parodule_Func_Pixel:
                     'LED(픽셀) 모듈에 내장된 특수한 동작을 사용할 수 있습니다.',
                 Parodule_Func_Buzzer:
@@ -304,7 +298,7 @@ Entry.Robotry_Parodule.monitorTemplate = function () {
     // 블록의 배치 순서
     Entry.Robotry_Parodule.blockMenuBlocks = [
         'Parodule_Input_title',
-        //'Parodule_Sensor_Data', // 센서 모듈은 아직 출시 예정 없음
+        'Parodule_Sensor_Data', // 센서 모듈은 아직 출시 예정 없음
         'Parodule_Sensor_Kind',
 
         'Parodule_title',
@@ -318,7 +312,6 @@ Entry.Robotry_Parodule.monitorTemplate = function () {
         'Parodule_Custom_Motor',
         'Parodule_Custom_Buzzer',
         'Parodule_Module_Off',
-        'Parodule_Module_Standby',
 
         'Parodule_Func_title',
         'Parodule_Func_Pixel',
@@ -985,14 +978,7 @@ Entry.Robotry_Parodule.getBlocks = function () {
             func(sprite, script) {
                 const port = script.getNumberValue('PORT');
                 const sensor_data = Entry.hw.portData.SENSOR
-                let value = false;
-                if (sensor_data[port] === 48) {
-                    value = false;
-                }
-                else if (sensor_data[port] === 49) {
-                    value = true;
-                }
-                return value;
+                return sensor_data[port];
             },
             syntax: {
                 js: [],
