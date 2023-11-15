@@ -54,8 +54,8 @@ Entry.Robotry_Parodule.setLanguage = function () {
         ko: {
             template: {
                 Parodule_Input_title: '센서 블럭\0',
-                Parodule_Sensor_Data: '%1 센서',
-                Parodule_Sensor_Kind: '%1 모듈 종류',
+                Parodule_Sensor_Data: '%1 센서 값',
+                Parodule_Module_Kind: '%1 모듈 종류',
 
                 Parodule_title: '제어 블럭\0',
                 Parodule_Set: '세모 : %1 원 : %4 네모 : %2  십자 : %3 으로 설정 %5',
@@ -78,7 +78,7 @@ Entry.Robotry_Parodule.setLanguage = function () {
             Helper: { // 블록 선택시 나타나는 한글 설명
                 Parodule_Sensor_Data:
                     '센서값을 반환합니다.',
-                Parodule_Sensor_Kind:
+                Parodule_Module_Kind:
                     '이 블록을 말하기 블록에 사용하면 모듈의 종류를 알 수 있습니다.',
                 Parodule_Set:
                     '메인모듈에 연결된 모듈의 종류를 설정합니다.',
@@ -158,7 +158,7 @@ Entry.Robotry_Parodule.setLanguage = function () {
             template: {
                 Parodule_Input_title: 'Sensor Block\0',
                 Parodule_Sensor_Data: 'Sensor values ​of %1',
-                Parodule_Sensor_Kind: 'kind of %1 ?',
+                Parodule_Module_Kind: 'Kinds of %1 Module',
 
                 Parodule_title: 'Controll Block\0',
                 Parodule_Set: 'Set to triangle : %1 circle : %4 square : %2  cross : %3 %5',
@@ -182,7 +182,7 @@ Entry.Robotry_Parodule.setLanguage = function () {
             Helper: {
                 Parodule_Sensor_Data:
                     '센서값을 반환합니다.',
-                Parodule_Sensor_Kind:
+                Parodule_Module_Kind:
                     '이 블록을 말하기 블록에 사용하면 모듈의 종류를 알 수 있습니다.',
                 Parodule_Set:
                     '메인모듈에 연결된 모듈의 종류를 설정합니다.',
@@ -299,7 +299,7 @@ Entry.Robotry_Parodule.monitorTemplate = function () {
     Entry.Robotry_Parodule.blockMenuBlocks = [
         'Parodule_Input_title',
         'Parodule_Sensor_Data', // 센서 모듈은 아직 출시 예정 없음
-        'Parodule_Sensor_Kind',
+        'Parodule_Module_Kind',
 
         'Parodule_title',
         'Parodule_Set',
@@ -976,9 +976,10 @@ Entry.Robotry_Parodule.getBlocks = function () {
             class: 'Get',
             isNotFor: ['Robotry_Parodule'],
             func(sprite, script) {
-                const port = script.getNumberValue('PORT');
+                const port = script.getNumberValue('PORT') % 4;
                 const sensor_data = Entry.hw.portData.SENSOR
-                return sensor_data[port];
+                let correction_port = port === 1 ? 3 : port === 2 ? 1 : port === 3 ? 2 : 0;
+                return sensor_data[correction_port];
             },
             syntax: {
                 js: [],
@@ -986,7 +987,7 @@ Entry.Robotry_Parodule.getBlocks = function () {
             },
         },
 
-        Parodule_Sensor_Kind: {
+        Parodule_Module_Kind: {
             color: EntryStatic.colorSet.block.default.HARDWARE,
             outerLine: EntryStatic.colorSet.block.darken.HARDWARE,
             fontColor: '#fff',
@@ -1007,7 +1008,7 @@ Entry.Robotry_Parodule.getBlocks = function () {
                         params: [0],
                     }
                 ],
-                type: 'Parodule_Sensor_Kind',
+                type: 'Parodule_Module_Kind',
             },
             paramsKeyMap: {
                 PORT: 0,
@@ -1047,7 +1048,7 @@ Entry.Robotry_Parodule.getBlocks = function () {
                 py: [{
                     syntax: 'Parodule.get_Module(%1)',
                     blockType: 'param',
-                    replaceBlockType: 'Parodule_Sensor_Kind',
+                    replaceBlockType: 'Parodule_Module_Kind',
                     textParams: [
                         {
                             type: 'Block',
